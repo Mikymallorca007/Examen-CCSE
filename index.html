@@ -8,7 +8,6 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            text-align: left;
             padding: 20px;
         }
         .container {
@@ -65,26 +64,34 @@
         .pantalla-inicial {
             text-align: center;
         }
-        .pantalla-inicial h1 {
-            font-size: 32px;
-            color: #333;
-        }
-        .pantalla-inicial p {
-            font-size: 20px;
-            color: #666;
-        }
-        .btn-empezar {
+        .boton {
             padding: 15px 30px;
             font-size: 20px;
-            background: #28a745;
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             margin-top: 20px;
         }
+        .btn-empezar {
+            background: #28a745;
+            color: white;
+        }
         .btn-empezar:hover {
             background: #218838;
+        }
+        .btn-finalizar {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-finalizar:hover {
+            background: #c82333;
+        }
+        .btn-reiniciar {
+            background: #17a2b8;
+            color: white;
+        }
+        .btn-reiniciar:hover {
+            background: #138496;
         }
     </style>
 </head>
@@ -94,7 +101,7 @@
             <h1>Bienvenida a tu examen</h1>
             <p>Este examen tiene 25 preguntas aleatorias. Debes tener **menos de 10 fallos** para aprobar.</p>
             <p><strong>Mucha suerte, cariño ❤️</strong></p>
-            <button class="btn-empezar" onclick="iniciarExamen()">Empezar</button>
+            <button class="boton btn-empezar" onclick="iniciarExamen()">Empezar</button>
         </div>
 
         <div id="examen" style="display: none;">
@@ -104,13 +111,15 @@
                 <span>Pregunta <span id="actual">1</span>/25</span>
                 <span>Aciertos: <span id="aciertos">0</span> | Fallos: <span id="fallos">0</span></span>
             </div>
+            <button class="boton btn-finalizar" onclick="finalizarExamen()">Finalizar Examen</button>
         </div>
 
         <div id="mensaje-final" class="mensaje-final" style="display: none;"></div>
+        <button id="btn-reiniciar" class="boton btn-reiniciar" style="display: none;" onclick="reiniciarExamen()">Reiniciar Examen</button>
     </div>
 
     <script>
-        const preguntas = [
+        let preguntas = [
             { texto: "¿A cuál de estas organizaciones internacionales pertenece España?", opciones: ["A. La Organización de Naciones Unidas (ONU)", "B. Al Mercado Común del Sur (MERCOSUR)", "C. A la unión económica Euroasiática (UEE)"], correcta: 0 },
             { texto: "El suministro de agua y el alumbrado de las ciudades es competencia de...", opciones: ["A. El Ayuntamiento", "B. El Gobierno autonómico", "C. El Ministerio de Obras Públicas y Urbanismo"], correcta: 0 },
             { texto: "¿Quién fue el primer presidente del Gobierno de España en democracia?", opciones: ["A. Mariano Rajoy", "B. Adolfo Suárez", "C. José Luis Rodríguez Zapatero"], correcta: 1 },
@@ -145,12 +154,13 @@
             { texto: "¿Cuándo empieza el calendario escolar?", opciones: ["A. En agosto", "B. En septiembre", "C. En octubre"], correcta: 1 },
             { texto: "¿Cómo se llama la ley laboral más importante de España?", opciones: ["A. La Constitución", "B. El Estatuto de los Trabajadores", "C. El Servicio Público de Empleo Estatal"], correcta: 1 },
             { texto: "¿Dónde se hace el pasaporte?", opciones: ["A. El Registro Civil", "B. Una comisaría de policía", "C. El ayuntamiento"], correcta: 1 }
-      ];
+   ];
 
-        while (preguntas.length < 25) {
-            preguntas.push({ texto: "Pregunta de prueba", opciones: ["Opción 1", "Opción 2", "Opción 3"], correcta: 0 });
+        function mezclarArray(array) {
+            return array.sort(() => Math.random() - 0.5);
         }
 
+        let preguntasActuales = [];
         let indexPregunta = 0;
         let aciertos = 0;
         let errores = 0;
@@ -159,11 +169,17 @@
         function iniciarExamen() {
             document.getElementById("pantalla-inicial").style.display = "none";
             document.getElementById("examen").style.display = "block";
+
+            preguntasActuales = mezclarArray([...preguntas]).slice(0, 25);
+            indexPregunta = 0;
+            aciertos = 0;
+            errores = 0;
+
             mostrarPregunta();
         }
 
         function mostrarPregunta() {
-            if (indexPregunta >= 25) {
+            if (indexPregunta >= preguntasActuales.length) {
                 mostrarMensajeFinal();
                 return;
             }
@@ -171,10 +187,11 @@
             document.getElementById("aciertos").textContent = aciertos;
             document.getElementById("fallos").textContent = errores;
 
-            const pregunta = preguntas[indexPregunta];
+            const pregunta = preguntasActuales[indexPregunta];
             document.getElementById("pregunta").textContent = pregunta.texto;
             const opcionesDiv = document.getElementById("opciones");
             opcionesDiv.innerHTML = "";
+
             pregunta.opciones.forEach((opcion, i) => {
                 const boton = document.createElement("button");
                 boton.textContent = opcion;
@@ -185,18 +202,26 @@
         }
 
         function evaluarRespuesta(seleccion, boton) {
-            const correcta = preguntas[indexPregunta].correcta;
+            const correcta = preguntasActuales[indexPregunta].correcta;
+            const botones = document.querySelectorAll(".opcion");
+
             if (seleccion === correcta) {
                 boton.classList.add("correcta");
                 aciertos++;
             } else {
                 boton.classList.add("incorrecta");
+                botones[correcta].classList.add("correcta"); // Marca la correcta en verde
                 errores++;
             }
+
             setTimeout(() => {
                 indexPregunta++;
                 mostrarPregunta();
             }, 3000);
+        }
+
+        function finalizarExamen() {
+            mostrarMensajeFinal();
         }
 
         function mostrarMensajeFinal() {
@@ -208,6 +233,11 @@
                 mensajeFinal.innerHTML = "Lo hiciste bien, sigue practicando y lo lograrás. ❤️";
             }
             mensajeFinal.style.display = "block";
+            document.getElementById("btn-reiniciar").style.display = "block";
+        }
+
+        function reiniciarExamen() {
+            location.reload();
         }
     </script>
 </body>
