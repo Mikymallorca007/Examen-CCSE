@@ -221,8 +221,15 @@
         }
 
         function finalizarExamen() {
-            mostrarMensajeFinal();
-        }
+    const confirmar = confirm("¿Seguro que quieres finalizar el examen?");
+    if (confirmar) {
+        document.getElementById("examen").style.display = "none";
+        const mensajeFinal = document.getElementById("mensaje-final");
+        mensajeFinal.innerHTML = "No te frustres, inténtalo de nuevo ❤️";
+        mensajeFinal.style.display = "block";
+        document.getElementById("btn-reiniciar").style.display = "block";
+    }
+}
 
         function mostrarMensajeFinal() {
             document.getElementById("examen").style.display = "none";
