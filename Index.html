@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: left;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .pregunta {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: left;
+        }
+        .opcion {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+        .opcion:hover {
+            background-color: #0056b3;
+        }
+        .correcta {
+            background-color: green !important;
+        }
+        .incorrecta {
+            background-color: red !important;
+        }
+        .info {
+            margin-top: 20px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .mensaje-final {
+            font-size: 28px;
+            font-weight: bold;
+            color: darkgreen;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .pantalla-inicial {
+            text-align: center;
+        }
+        .pantalla-inicial h1 {
+            font-size: 32px;
+            color: #333;
+        }
+        .pantalla-inicial p {
+            font-size: 20px;
+            color: #666;
+        }
+        .btn-empezar {
+            padding: 15px 30px;
+            font-size: 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-empezar:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="pantalla-inicial" class="pantalla-inicial">
+            <h1>Bienvenida a tu examen</h1>
+            <p>Este examen tiene 25 preguntas aleatorias. Debes tener **menos de 10 fallos** para aprobar.</p>
+            <p><strong>Mucha suerte, cariño ❤️</strong></p>
+            <button class="btn-empezar" onclick="iniciarExamen()">Empezar</button>
+        </div>
+
+        <div id="examen" style="display: none;">
+            <div id="pregunta" class="pregunta"></div>
+            <div id="opciones"></div>
+            <div class="info">
+                <span>Pregunta <span id="actual">1</span>/25</span>
+                <span>Aciertos: <span id="aciertos">0</span> | Fallos: <span id="fallos">0</span></span>
+            </div>
+        </div>
+
+        <div id="mensaje-final" class="mensaje-final" style="display: none;"></div>
+    </div>
+
+    <script>
+        const preguntas = [
+            { texto: "¿A cuál de estas organizaciones internacionales pertenece España?", opciones: ["A. La Organización de Naciones Unidas (ONU)", "B. Al Mercado Común del Sur (MERCOSUR)", "C. A la unión económica Euroasiática (UEE)"], correcta: 0 },
+            { texto: "El suministro de agua y el alumbrado de las ciudades es competencia de...", opciones: ["A. El Ayuntamiento", "B. El Gobierno autonómico", "C. El Ministerio de Obras Públicas y Urbanismo"], correcta: 0 },
+            { texto: "¿Quién fue el primer presidente del Gobierno de España en democracia?", opciones: ["A. Mariano Rajoy", "B. Adolfo Suárez", "C. José Luis Rodríguez Zapatero"], correcta: 1 },
+            { texto: "El Tribunal de Cuentas depende de...", opciones: ["A. La presidencia del gobierno", "B. Las Cortes Generales", "C. El Ministerio de Hacienda"], correcta: 1 },
+            { texto: "¿Cuál de estas fuerzas de seguridad es de ámbito autonómico?", opciones: ["A. Policía foral de Navarra", "B. Guardia Civil", "C. Policía Local"], correcta: 0 },
+            { texto: "¿Quién puede reinar en España?", opciones: ["A. Solo los hombres", "B. Solo las mujeres", "C. Tanto los hombres como las mujeres"], correcta: 2 },
+            { texto: "¿Cuántas mujeres han sido presidentas del Gobierno en España?", opciones: ["A. Ninguna", "B. Una", "C. Dos"], correcta: 0 },
+            { texto: "¿Qué ciudad tiene más habitantes?", opciones: ["A. Sevilla", "B. Barcelona", "C. Zaragoza"], correcta: 1 },
+            { texto: "¿Cuántas comunidades autónomas tienen su propia bandera?", opciones: ["A. Ninguna", "B. Todas", "C. Las que tienen una lengua cooficial"], correcta: 2 },
+            { texto: "¿Cómo se llama el órgano de gobierno de los jueces y magistrados?", opciones: ["A. Tribunal Supremo", "B. Consejo General del Poder Judicial", "C. Consejo de Estado"], correcta: 1 },
+            { texto: "¿Quién es la tercera autoridad del Estado después del Rey y el presidente del Gobierno?", opciones: ["A. El Presidente del Senado", "B. El ministro de Economía", "C. El Presidente del Congreso de los Diputados"], correcta: 2 },
+            { texto: "¿Cómo se aprobó la Constitución?", opciones: ["A. Por el Rey", "B. En referéndum", "C. Lo mandó el Rey"], correcta: 1 },
+            { texto: "¿Quién vigila el tráfico en las carreteras?", opciones: ["A. La Guardia Civil", "B. La Policía Nacional", "C. El Ejército de Tierra"], correcta: 0 },
+            { texto: "¿Cómo se llama la organización que defiende los intereses de los trabajadores?", opciones: ["A. Asociación", "B. Partido", "C. Sindicato"], correcta: 2 },
+            { texto: "¿Quién se encarga de recaudar los impuestos?", opciones: ["A. El Tribunal de Cuentas", "B. Agencia Tributaria", "C. El Consejo Económico y Social"], correcta: 1 },
+            { texto: "¿Quién dirige la política interior y exterior de España?", opciones: ["A. El Rey", "B. El Gobierno", "C. El Congreso de los Diputados"], correcta: 1 },
+            { texto: "La Constitución Española es...?", opciones: ["A. Una ley fundamental", "B. Parte de otra ley", "C. Una ley secundaria"], correcta: 0 },
+            { texto: "¿Dónde se encuentra toda la información sobre novedades e iniciativas de la Administración Electrónica?", opciones: ["A. El INE (Instituto Nacional de Estadística)", "B. El BOE (Boletín Oficial del Estado)", "C. El PAE portal de administración electrónica"], correcta: 2 },
+            { texto: "¿Con qué rey se restaura la democracia en España después del régimen de Franco?", opciones: ["A. Carlos III", "B. Alfonso XIII", "C. Juan Carlos I"], correcta: 2 },
+            { texto: "La Constitución garantiza el derecho de los españoles a una vivienda digna", opciones: ["A. Verdadero", "B. Falso", "C. --------------------------------------------"], correcta: 0 },
+            { texto: "La ley limita el acceso de terceras personas a datos de carácter personal", opciones: ["A. Verdadero", "B. Falso", "C. --------------------------------------------"], correcta: 0 },
+            { texto: "En España las causas de separación y divorcio están reguladas por la ley", opciones: ["A. Verdadero", "B. Falso", "C. --------------------------------------------"], correcta: 0 },
+            { texto: "España se divide en...", opciones: ["A. Departamentos y regiones", "B. Comunidades y ciudades autonómicas", "C. Regiones autónomas y distritos"], correcta: 1 },
+            { texto: "Canarias tiene un clima...", opciones: ["A. Mediterráneo", "B. Oceánico", "C. Subtropical"], correcta: 2 },
+            { texto: "Las chirigotas de Cádiz son típicas de...", opciones: ["A. la Semana Santa", "B. Los Carnavales", "C. Las verbenas de verano"], correcta: 1 },
+            { texto: "¿Cómo se llama la mayor institución pública dedicada a la investigación en España?", opciones: ["A. Real Academia Española (RAE)", "B. Consejo Superior de Investigaciones Científicas (CSIC)", "C. la Sociedad General de Autores (SGAE)"], correcta: 1 },
+            { texto: "Teresa Perales y Daniel Molina son...", opciones: ["A. Campeones Paralímpicos", "B. Músicos famosos", "C. Artistas de cine"], correcta: 0 },
+            { texto: "¿Cómo se llaman los principales trenes de alta velocidad?", opciones: ["A. AVE", "B. TGV", "C. Eurostar"], correcta: 0 },
+            { texto: "¿Para cuántos años vale la tarjeta sanitaria europea?", opciones: ["A. Un año", "B. Diez años", "C. Dos años"], correcta: 1 },
+            { texto: "¿Cuál es un periódico deportivo?", opciones: ["A. ABC", "B. As", "C. Cinco días"], correcta: 1 },
+            { texto: "¿Cuál es la edad mínima para conducir un coche en España?", opciones: ["A. 16 años", "B. 18 años", "C. 20 años"], correcta: 1 },
+            { texto: "¿Cuándo empieza el calendario escolar?", opciones: ["A. En agosto", "B. En septiembre", "C. En octubre"], correcta: 1 },
+            { texto: "¿Cómo se llama la ley laboral más importante de España?", opciones: ["A. La Constitución", "B. El Estatuto de los Trabajadores", "C. El Servicio Público de Empleo Estatal"], correcta: 1 },
+            { texto: "¿Dónde se hace el pasaporte?", opciones: ["A. El Registro Civil", "B. Una comisaría de policía", "C. El ayuntamiento"], correcta: 1 }
+      ];
+
+        while (preguntas.length < 25) {
+            preguntas.push({ texto: "Pregunta de prueba", opciones: ["Opción 1", "Opción 2", "Opción 3"], correcta: 0 });
+        }
+
+        let indexPregunta = 0;
+        let aciertos = 0;
+        let errores = 0;
+        const maxErrores = 10;
+
+        function iniciarExamen() {
+            document.getElementById("pantalla-inicial").style.display = "none";
+            document.getElementById("examen").style.display = "block";
+            mostrarPregunta();
+        }
+
+        function mostrarPregunta() {
+            if (indexPregunta >= 25) {
+                mostrarMensajeFinal();
+                return;
+            }
+            document.getElementById("actual").textContent = indexPregunta + 1;
+            document.getElementById("aciertos").textContent = aciertos;
+            document.getElementById("fallos").textContent = errores;
+
+            const pregunta = preguntas[indexPregunta];
+            document.getElementById("pregunta").textContent = pregunta.texto;
+            const opcionesDiv = document.getElementById("opciones");
+            opcionesDiv.innerHTML = "";
+            pregunta.opciones.forEach((opcion, i) => {
+                const boton = document.createElement("button");
+                boton.textContent = opcion;
+                boton.classList.add("opcion");
+                boton.onclick = () => evaluarRespuesta(i, boton);
+                opcionesDiv.appendChild(boton);
+            });
+        }
+
+        function evaluarRespuesta(seleccion, boton) {
+            const correcta = preguntas[indexPregunta].correcta;
+            if (seleccion === correcta) {
+                boton.classList.add("correcta");
+                aciertos++;
+            } else {
+                boton.classList.add("incorrecta");
+                errores++;
+            }
+            setTimeout(() => {
+                indexPregunta++;
+                mostrarPregunta();
+            }, 3000);
+        }
+
+        function mostrarMensajeFinal() {
+            document.getElementById("examen").style.display = "none";
+            const mensajeFinal = document.getElementById("mensaje-final");
+            if (errores < maxErrores) {
+                mensajeFinal.innerHTML = "✨ <strong>MUY BIEN, AMOR MÍO ❤️</strong> ✨<br>Vas a aprobar tu examen el día 27! ¡SUERTE! 🎉";
+            } else {
+                mensajeFinal.innerHTML = "Lo hiciste bien, sigue practicando y lo lograrás. ❤️";
+            }
+            mensajeFinal.style.display = "block";
+        }
+    </script>
+</body>
+</html>
