@@ -19,11 +19,12 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
-        .pregunta {
-            font-size: 22px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            text-align: left;
+.pregunta {
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: left;
+    word-break: break-word; /* Evita que las palabras se salgan del contenedor */
         }
         .opcion {
             display: block;
@@ -57,11 +58,11 @@
             margin-top: 20px;
         }
         .btn-empezar { background: #28a745; color: white; }
-        .btn-finalizar { background: #dc3545; color: white; }
         .btn-reiniciar { background: #17a2b8; color: white; }
+        .btn-finalizar { background: #dc3545; color: white; }
         .btn-empezar:hover { background: #218838; }
-        .btn-finalizar:hover { background: #c82333; }
         .btn-reiniciar:hover { background: #138496; }
+        .btn-finalizar:hover { background: #c82333; }
         .errores-container {
             display: none;
             margin-top: 30px;
@@ -91,14 +92,15 @@
                 <span>Pregunta <span id="actual">1</span>/25</span>
                 <span>Aciertos: <span id="aciertos">0</span> | Fallos: <span id="fallos">0</span></span>
             </div>
-            <button class="boton btn-finalizar" onclick="finalizarExamen()">Finalizar Examen</button>
+            <!-- Botón de finalizar examen agregado -->
+            <button id="btn-finalizar" class="boton btn-finalizar" onclick="finalizarExamen()">Finalizar Examen</button>
         </div>
         <div id="mensaje-final" class="mensaje-final" style="display: none;"></div>
         <div id="errores-container" class="errores-container"></div>
         <button id="btn-reiniciar" class="boton btn-reiniciar" style="display: none;" onclick="reiniciarExamen()">Reiniciar Examen</button>
     </div>
     <script>
-        let preguntas = [
+         let preguntas = [
 { texto: "¿A cuál de estas organizaciones internacionales pertenece España?", opciones: ["A la Organización de Naciones Unidas (ONU)", "Al Mercado Común del Sur (MERCOSUR).", "A la unión económica Euroasiatica (UEE)"], correcta: 0 },
 { texto: "El suministro de agua y el alumbrado de las ciudades es competencia de…", opciones: ["El Ayuntamiento.", "El Gobierno autonómico.", "El Ministerio de Obras Públicas y Urbanismo."], correcta: 0 },
 { texto: "Quién fue el primer presidente del Gobierno de España en democracia ?", opciones: [" Mariano Rajoy Adolfo Suárez José Luis Rodríguez Zapatero.", "Adolfo Suárez.", "José Luis Rodríguez Zapatero."], correcta: 1 },
@@ -116,7 +118,7 @@
 { texto: "Quién se encarga de recaudar los impuestos ?", opciones: ["El Tribunal de Cuentas.", "Agencia Tributaria.", "El Consejo Económico y Social."], correcta: 1 },
 { texto: "Quién dirige la política interior y exterior de España ?", opciones: ["El rey.", "El gobierno.", "El Congreso de los Diputados. "], correcta: 1 },
 { texto: "La Constitución Española es…?", opciones: ["Una ley fundamental.", "Parte de otra ley.", "Una ley secundaria. "], correcta: 0 },
-{ texto: "Dónde se encuentra toda la información sobre novedades e iniciativas de la AdmElec", opciones: ["El INE (Instituto Nacional de Estadística).", "El BOE (Boletín Oficial del Estado)", "El PAE portal de administración electrónica. "], correcta: 2 },
+{ texto: "Dónde se encuentra toda la información sobre novedades e iniciativas de la Administración Electrónica", opciones: ["El INE (Instituto Nacional de Estadística).", "El BOE (Boletín Oficial del Estado)", "El PAE portal de administración electrónica. "], correcta: 2 },
 { texto: "Con qué rey se restaura la democracia España después del régimen de Franco ?", opciones: ["Carlos III.", "Alfonso XIII.", "Juan Carlos I."], correcta: 2 },
 { texto: "La Constitución garantiza el derecho de los españoles a una vivienda digna.", opciones: ["Verdadero.", "Falso.", "--------------------------------------------"], correcta: 0 },
 { texto: "La ley limita el acceso de terceras personas a datos de carácter personal.", opciones: ["Verdadero.", "Falso.", "--------------------------------------------"], correcta: 0 },
@@ -143,7 +145,7 @@
 { texto: "Quienes forman parte del Gobierno de la nación ?", opciones: ["Los ministros.", "Los concejales.", "Los alcaldes."], correcta: 0 },
 { texto: "Se puede limitar a una persona el derecho a entrar y salir libremente de España por motivos ideológicos.", opciones: ["verdadero.", "Falso.", "-----------------------"], correcta: 1 },
 { texto: "Los jovenes tienen derecho a participar en el desarrollo político del país.", opciones: ["Verdadero.", "Falso.", "-----------------------"], correcta: 0 },
-{ texto: "Todos los ciudadanos tendrán acceso al sistema de Seguridad Socila Público, excepto si estan desempleados.", opciones: ["Verdadero.", "Falso.", "-----------------------"], correcta: 1 },
+{ texto: "Todos los ciudadanos tendrán acceso al sistema de Seguridad Social Público, excepto si estan desempleados.", opciones: ["Verdadero.", "Falso.", "-----------------------"], correcta: 1 },
 { texto: "Cual de estos ríos desemboca en el océano Atlántico ?", opciones: ["El Guadalquivir.", "El Manzanares.", "El Júcar."], correcta: 0 },
 { texto: "El 6 de diciembre se celebra en España…", opciones: ["El Día de la Constitución.", "La llegada de Colón a América.", "El Día del libro."], correcta: 0 },
 { texto: "La liga y la Copa del Rey son competiciones de…", opciones: ["Natación.", "Atletísmo.", "Fútbol."], correcta: 2 },
@@ -163,14 +165,17 @@
 { texto: "Cual de estos es un órgano consultivo del Gobierno de España ?", opciones: ["El Parlamento Europeo.", "El Consejo del Estado.", "El Tribunal Constitucional."], correcta: 1 },
 { texto: "Donde vive el presidente del Gobierno ?", opciones: ["Palacio Real.", "Palacio de la Zarzuela.", "Palacio de la Moncloa."], correcta: 2 },
         ];
+
         function mezclarArray(array) {
             return array.sort(() => Math.random() - 0.5);
         }
+
         let preguntasActuales = [];
         let indexPregunta = 0;
         let aciertos = 0;
         let errores = 0;
         let erroresLista = [];
+
         function iniciarExamen() {
             document.getElementById("pantalla-inicial").style.display = "none";
             document.getElementById("examen").style.display = "block";
@@ -181,6 +186,7 @@
             erroresLista = [];
             mostrarPregunta();
         }
+
         function mostrarPregunta() {
             if (indexPregunta >= preguntasActuales.length) {
                 mostrarMensajeFinal();
@@ -201,6 +207,7 @@
                 opcionesDiv.appendChild(boton);
             });
         }
+
         function evaluarRespuesta(seleccion, boton) {
             const pregunta = preguntasActuales[indexPregunta];
             if (seleccion === pregunta.correcta) {
@@ -214,23 +221,35 @@
                     respuestaSeleccionada: pregunta.opciones[seleccion],
                     respuestaCorrecta: pregunta.opciones[pregunta.correcta]
                 });
-                // Mostrar la respuesta correcta
-                const opcionesDiv = document.getElementById("opciones").children;
-                opcionesDiv[pregunta.correcta].classList.add("correcta-respuesta");
+                document.getElementById("opciones").children[pregunta.correcta].classList.add("correcta-respuesta");
             }
             setTimeout(() => { indexPregunta++; mostrarPregunta(); }, 3000);
         }
+
+        // Función para finalizar el examen manualmente
+        function finalizarExamen() {
+            mostrarMensajeFinal();
+        }
+
         function mostrarMensajeFinal() {
+            document.getElementById("btn-finalizar").style.display = "none"; // Ocultar el botón de finalizar
             let erroresDiv = document.getElementById("errores-container");
-            erroresDiv.innerHTML = "<h2>Preguntas incorrectas:</h2>" + erroresLista.map(error => 
-                `<div class="error-item">
-                    <p><strong>Pregunta:</strong> ${error.pregunta}</p>
-                    <p><strong>Tu respuesta:</strong> ${error.respuestaSeleccionada}</p>
-                    <p><strong>Respuesta correcta:</strong> ${error.respuestaCorrecta}</p>
-                    <div class="separador"></div>
-                </div>`
-            ).join("");
-            erroresDiv.style.display = "block";
+            if (erroresLista.length > 0) {
+                erroresDiv.innerHTML = "<h2>Preguntas incorrectas:</h2>" + erroresLista.map(error => 
+                    `<div class="error-item">
+                        <p><strong>Pregunta:</strong> ${error.pregunta}</p>
+                        <p><strong>Tu respuesta:</strong> ${error.respuestaSeleccionada}</p>
+                        <p><strong>Respuesta correcta:</strong> ${error.respuestaCorrecta}</p>
+                        <div class="separador"></div>
+                    </div>`).join("");
+                erroresDiv.style.display = "block";
+            }
+            document.getElementById("mensaje-final").textContent = errores <= 10 ? "¡Felicidades, has aprobado!" : "Lo siento, has reprobado.";
+            document.getElementById("btn-reiniciar").style.display = "block";
+        }
+
+        function reiniciarExamen() {
+            location.reload();
         }
     </script>
 </body>
