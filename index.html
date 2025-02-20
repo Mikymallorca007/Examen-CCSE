@@ -81,7 +81,7 @@
     <div class="container">
         <div id="pantalla-inicial" class="pantalla-inicial">
             <h1>Bienvenida a tu examen</h1>
-            <p>Este examen tiene 25 preguntas aleatorias. Debes tener **menos de 11 fallos** para aprobar.</p>
+            <p>Este examen tiene 25 preguntas aleatorias seleccionadas de un total de <strong id="total-preguntas"></strong> disponibles.</p>
             <p><strong>Mucha suerte, cariño ❤️</strong></p>
             <button class="boton btn-empezar" onclick="iniciarExamen()">Empezar</button>
         </div>
@@ -164,6 +164,43 @@
 { texto: "Cuantas religiones oficiales hay en España ?", opciones: ["Ninguna.", "Una.", "Dos."], correcta: 0 },
 { texto: "Cual de estos es un órgano consultivo del Gobierno de España ?", opciones: ["El Parlamento Europeo.", "El Consejo del Estado.", "El Tribunal Constitucional."], correcta: 1 },
 { texto: "Donde vive el presidente del Gobierno ?", opciones: ["Palacio Real.", "Palacio de la Zarzuela.", "Palacio de la Moncloa."], correcta: 2 },
+{ "texto": "Cuánto dura el permiso de maternidad o paternidad?", "opciones": ["16 semanas.", "12 semanas.", "22 semanas."], "correcta": 0 },
+{ "texto": "Las relaciones internacionales son competencia de…", "opciones": ["El Estado.", "Las Comunidades Autónomas.", "Los Ayuntamientos."], "correcta": 0 },
+{ "texto": "Quién fue el primer rey de España?", "opciones": ["Fernando VII.", "Carlos I.", "Juan Carlos I."], "correcta": 1 },
+{ "texto": "Qué tipo de ley dicta el Gobierno en casos de especial urgencia?", "opciones": ["El decreto ley.", "La ley ordinaria.", "La ley orgánica."], "correcta": 0 },
+{ "texto": "Cuál es el límite de velocidad en autopista?", "opciones": ["150 km/h", "120 km/h", "90 km/h"], "correcta": 1 },
+{ "texto": "Qué tres culturas convivieron en la España medieval?", "opciones": ["La cristiana, la judía y la musulmana.", "La fenicia, la judía y la musulmana.", "La griega, la cristiana y la judía."], "correcta": 0 },
+{ "texto": "Dónde se tramita la tarjeta sanitaria?", "opciones": ["En la comisaría de policía.", "En el centro de salud.", "En el Ministerio de Sanidad."], "correcta": 1 },
+{ "texto": "La capital de la Comunidad Autónoma de Galicia es…", "opciones": ["A Coruña.", "Vigo.", "Santiago de Compostela."], "correcta": 2 },
+{ "texto": "Quién dirige la política interior y exterior de España?", "opciones": ["El Rey.", "El Gobierno.", "El Congreso de los Diputados."], "correcta": 1 },
+{ "texto": "Cuál es la capital del Principado de Asturias?", "opciones": ["Avilés.", "Gijón.", "Oviedo."], "correcta": 2 },
+{ "texto": "El aperitivo que acompaña a la bebida en bares y restaurantes se llama…", "opciones": ["Bocadillo.", "Tapa.", "Primer plato."], "correcta": 1 },
+{ "texto": "Cuál es el órgano superior del poder ejecutivo?", "opciones": ["El Gobierno.", "Las Fuerzas Armadas.", "Las Cortes Generales."], "correcta": 0 },
+{ "texto": "Los españoles deben ayudar en los casos de catástrofe o calamidad pública.", "opciones": ["Verdadero.", "Falso."], "correcta": 0 },
+{ "texto": "Los españoles necesitan el pasaporte para viajar a…", "opciones": ["Italia.", "China.", "Alemania."], "correcta": 1 },
+{ "texto": "Paco de Lucía fue un famoso…", "opciones": ["Científico.", "Guitarrista.", "Pintor."], "correcta": 1 },
+{ "texto": "Cuál es el número de teléfono único para cualquier emergencia?", "opciones": ["060.", "112.", "911."], "correcta": 1 },
+{ "texto": "Las Cortes Generales están compuestas por el Senado y…", "opciones": ["El Congreso de los Diputados.", "El Tribunal Supremo.", "El Consejo de Estado."], "correcta": 0 },
+{ "texto": "El Camino de Santiago es…", "opciones": ["Una vía de ferrocarril.", "Patrimonio de la Humanidad.", "Una ruta para excursionistas."], "correcta": 1 },
+{ "texto": "Los españoles tienen dos apellidos, el primero es…", "opciones": ["Puede ser de la madre o el del padre.", "Obligatoriamente el del padre.", "Obligatoriamente el de la madre."], "correcta": 0 },
+{ "texto": "El Gobierno está formado por el presidente, uno o más vicepresidentes y los…", "opciones": ["Concejales.", "Ministros.", "Gobernadores."], "correcta": 1 },
+{ "texto": "Qué músico compuso 'El amor brujo'?", "opciones": ["Manuel de Falla.", "Isaac Albéniz.", "Joaquín Rodrigo."], "correcta": 0 },
+{ "texto": "La Educación Primaria (de 6 a 12 años) es obligatoria y gratuita.", "opciones": ["Verdadero.", "Falso."], "correcta": 0 },
+{ "texto": "Cuál de estas comunidades autónomas tiene solo una provincia?", "opciones": ["La Rioja.", "Aragón.", "Galicia."], "correcta": 0 },
+{ "texto": "La atención sanitaria es gratuita.", "opciones": ["Verdadero.", "Falso."], "correcta": 0 },
+{ "texto": "El Tribunal de Cuentas depende de…", "opciones": ["La Presidencia del Gobierno.", "Las Cortes Generales.", "El Ministerio de Hacienda."], "correcta": 1 },
+{ "texto": "Cuál de estas provincias forma parte de la Comunidad de Castilla y León?", "opciones": ["Burgos.", "Huesca.", "Guadalajara."], "correcta": 0 },
+{ "texto": "Las Escuelas Oficiales de Idiomas…", "opciones": ["Son centros de enseñanza privada.", "Son para mayores de 16 años.", "Dependen del Instituto Cervantes."], "correcta": 1 },
+{ "texto": "Algunos ciudadanos extranjeros pueden votar en las elecciones…", "opciones": ["Municipales.", "Autonómicas.", "Generales."], "correcta": 0 },
+{ "texto": "Ceder el asiento a las personas con movilidad reducida es una norma que encontraremos indicada en…", "opciones": ["El transporte público.", "Las bibliotecas.", "Los museos."], "correcta": 0 },
+{ "texto": "Para hacer el DNI debes acudir a…", "opciones": ["Una comisaría de policía.", "El Registro Civil.", "El Ayuntamiento."], "correcta": 0 },
+{ "texto": "El Defensor del Pueblo depende de…", "opciones": ["El Consejo de Ministros.", "El Tribunal de Cuentas.", "Las Cortes Generales."], "correcta": 2 },
+{ "texto": "El escritor Miguel de Cervantes nació en…", "opciones": ["La Mancha.", "Madrid.", "Alcalá de Henares."], "correcta": 2 },
+{ "texto": "Cuál de estos establecimientos está abierto 24 horas si es necesario?", "opciones": ["Farmacia.", "Pescadería.", "Librería."], "correcta": 0 },
+{ "texto": "Cuál de los siguientes organismos trabaja para conseguir la normalización lingüística?", "opciones": ["Instituto Ramon Llull.", "Instituto Cervantes.", "Real Academia Española."], "correcta": 2 },
+{ "texto": "La formación profesional…", "opciones": ["Es para mayores de 25 años.", "Puede ser de grado medio o superior.", "Es obligatoria."], "correcta": 1 },
+{ "texto": "En España los ciudadanos pueden elegir en qué ciudad vivir.", "opciones": ["Verdadero.", "Falso."], "correcta": 0 },
+{ "texto": "Qué ciudad tiene más habitantes?", "opciones": ["Sevilla.", "Barcelona.", "Zaragoza."], "correcta": 1 }
         ];
 
         function mezclarArray(array) {
@@ -176,7 +213,13 @@
         let errores = 0;
         let erroresLista = [];
 
-        function iniciarExamen() {
+
+    window.onload = function() {
+        document.getElementById("total-preguntas").textContent = preguntas.length;
+    };
+
+
+            function iniciarExamen() {
             document.getElementById("pantalla-inicial").style.display = "none";
             document.getElementById("examen").style.display = "block";
             preguntasActuales = mezclarArray([...preguntas]).slice(0, 25);
